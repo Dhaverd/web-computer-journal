@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Boilerplate</title>
+        <title>Журнал ТО</title>
         @vite('resources/app.js')
         @vite('resources/css/app.css')
     </head>
