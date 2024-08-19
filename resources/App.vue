@@ -31,8 +31,9 @@
                 :class="menuOpen ? 'mt-2 mb-2 pa-2' : 'mt-10 mb-3 pa-5'"
             >
                 <p class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/" class="nav-link text-decoration-none">Главная</RouterLink></p>
-                <p class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/login" class="nav-link text-decoration-none">Войти</RouterLink></p>
-                <p class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/register" class="nav-link text-decoration-none">Регистрация</RouterLink></p>
+                <p v-if="user == null" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/login" class="nav-link text-decoration-none">Войти</RouterLink></p>
+                <p v-if="user == null" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/register" class="nav-link text-decoration-none">Регистрация</RouterLink></p>
+                <p v-else class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><a href="#" class="nav-link text-decoration-none" @click="logout">Выйти</a></p>
             </v-sheet>
             <v-sheet class="rounded-lg main-bg h-100 mt-3 mr-10 ml-10 mb-10 pa-5">
                 <RouterView v-slot="{ Component }">
@@ -48,6 +49,7 @@
 
 <script>
 import {th} from "vuetify/locale";
+import {useAuthStore} from "./store/auth.js";
 
 export default {
     name: "App",
@@ -57,7 +59,19 @@ export default {
         isWide: window.innerWidth >= 460,
         menuOpen: false
     }),
+    computed: {
+        user() {
+            const authStore = useAuthStore();
+            return authStore.user;
+        },
+    },
     methods: {
+        logout() {
+            const authStore = useAuthStore();
+            authStore.logout();
+            this.username = 'guest';
+            this.$router.push('/login');
+        },
         resizeEventHandler(e) {
             this.windowHeight = document.documentElement.clientHeight;
             this.windowWidth = document.documentElement.clientWidth;

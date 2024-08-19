@@ -10,6 +10,9 @@ import Login from "./views/Login.vue";
 import About from "./views/About.vue";
 import Register from "./views/Register.vue";
 import {createMemoryHistory, createRouter} from "vue-router";
+import { createPinia } from 'pinia';
+
+const pinia = createPinia();
 
 const routes = [
     {path: '/', component: About, props: true},
@@ -27,4 +30,4 @@ const vuetify = createVuetify({
     directives
 })
 
-createApp(App).use(vuetify).use(router).mount("#app")
+createApp(App).use(vuetify).use(router).use(pinia).mount("#app")
