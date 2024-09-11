@@ -1,14 +1,14 @@
 <template>
     <div class="w-100 h-100 d-flex justify-center">
-        <div class="d-flex flex-column justify-center h-100" :class="isWide ? 'w-50' : 'w-75'">
-            <v-form @submit.prevent="login">
-                <v-label>Логин:</v-label>
+        <div class="d-flex flex-column align-center justify-center h-100 w-75">
+            <v-form class="d-flex flex-column justify-center h-100 flex-grow-1" :class="isWide ? 'w-50' : 'w-75'" @submit.prevent="login">
+                <v-label>Email:</v-label>
                 <v-text-field type="email" v-model="email" label="E-mail" class="flex-grow-0" required></v-text-field>
                 <v-label>Пароль:</v-label>
                 <v-text-field type="password" v-model="password" label="Пароль" class="flex-grow-0" required></v-text-field>
-                <div class="d-flex justify-center" :class="isWide ? '' : 'flex-column align-center'">
-                    <v-btn type="submit" color="#F0A068FF" class="ma-5 flex-grow-0" :class="isWide ? 'w-25' : 'w-100 text-body-1'" block>Войти</v-btn>
-                    <router-link to="/register" class="text-decoration-none link-no-color ma-5" :class="isWide ? 'w-25' : 'w-100'">
+                <div class="d-flex justify-center align-center" :class="isWide ? '' : 'flex-column align-center'">
+                    <v-btn type="submit" color="#F0A068FF" class="ma-5 min-width-btn flex-grow-0" :class="isWide ? 'w-25' : 'w-100 text-body-1'" block>Войти</v-btn>
+                    <router-link to="/register" class="text-decoration-none link-no-color ma-5 flex-grow-0" :class="isWide ? 'w-25' : 'w-100'">
                         <v-btn color="#F0A068FF" :class="isWide ? 'w-100' : 'w-100 text-body-1'">Регистрация</v-btn>
                     </router-link>
                 </div>

@@ -37,8 +37,8 @@ export default {
                 <v-label>Пароль:</v-label>
                 <v-text-field type="password" v-model="password" label="Пароль" class="flex-grow-0" required></v-text-field>
                 <div class="d-flex justify-center" :class="isWide ? '' : 'flex-column align-center'">
-                    <v-btn type="submit" color="#F0A068FF" class="ma-5" :class="isWide ? 'w-25' : 'w-100 text-body-1'" block>Зарегистрироваться</v-btn>
-                    <router-link to="/login" class="text-decoration-none link-no-color ma-5" :class="isWide ? 'w-25' : 'w-100'">
+                    <v-btn type="submit" color="#F0A068FF" class="ma-5 min-width-btn flex-grow-0" :class="isWide ? 'w-25' : 'w-100 text-body-1'" block>Зарегистрироваться</v-btn>
+                    <router-link to="/login" class="text-decoration-none link-no-color ma-5 flex-grow-0" :class="isWide ? 'w-25' : 'w-100'">
                         <v-btn color="#F0A068FF" :class="isWide ? 'w-100' : 'w-100 text-body-1'">Вход</v-btn>
                     </router-link>
                 </div>
