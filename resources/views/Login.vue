@@ -6,8 +6,11 @@
                 <v-text-field type="email" v-model="email" label="E-mail" class="flex-grow-0" required></v-text-field>
                 <v-label>Пароль:</v-label>
                 <v-text-field type="password" v-model="password" label="Пароль" class="flex-grow-0" required></v-text-field>
+                <v-checkbox v-model="rememberMe" label="Запомнить меня"></v-checkbox>
                 <div class="d-flex justify-center" :class="isWide ? '' : 'flex-column align-center'">
-                    <v-btn type="submit" color="#F0A068FF" class="ma-5 flex-grow-0" :class="isWide ? 'w-25' : 'w-100 text-body-1'" block>Войти</v-btn>
+                    <!--<div>-->
+                        <v-btn type="submit" color="#F0A068FF" class="ma-5 flex-grow-0" :class="isWide ? 'w-25' : 'w-100 text-body-1'" :loading="loading">Войти</v-btn>
+                    <!--</div>-->
                     <router-link to="/register" class="text-decoration-none link-no-color ma-5" :class="isWide ? 'w-25' : 'w-100'">
                         <v-btn color="#F0A068FF" :class="isWide ? 'w-100' : 'w-100 text-body-1'">Регистрация</v-btn>
                     </router-link>
@@ -29,7 +32,7 @@
 </template>
 
 <script>
-import { useAuthStore } from '../store/auth.js';
+import { useUserStore } from '../store/auth.js';
 export default {
     name: "Login",
     props: {
@@ -37,16 +40,33 @@ export default {
     },
     data() {
         return {
+            userStore: useUserStore(),
             email: '',
             password: '',
+            rememberMe: false,
+            loading: false,
+            errorMessage: '',
+            errorMessageContainerStyle: 'display: none;'
         };
     },
     methods: {
         async login() {
-            const authStore = useAuthStore();
-            await authStore.login({
-                email: this.email,
-                password: this.password,
+            this.loading = true;
+            await this.userStore.login(this.email, this.password, this.rememberMe).then((isLogged)=>{
+                this.loading = false;
+                if (typeof isLogged == "boolean") {
+                    if (isLogged){
+                        this.errorMessage = '';
+                        this.errorMessageContainerStyle = 'display: none;';
+                        this.$router.push('/');
+                    } else {
+                        this.errorMessage = 'Authentication error';
+                        this.errorMessageContainerStyle = '';
+                    }
+                } else if (typeof isLogged == "string") {
+                    this.errorMessage = isLogged;
+                    this.errorMessageContainerStyle = '';
+                }
             });
             this.$router.push('/');
         },

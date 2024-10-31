@@ -4,58 +4,116 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 
 class AuthController extends Controller
 {
+    /**
+     * Create user
+     *
+     * @param  [string] name
+     * @param  [string] email
+     * @param  [string] password
+     * @param  [string] password_confirmation
+     * @return [string] message
+     */
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required',
+        $request->validate([
+            'name' => 'required|string',
+            'email'=>'required|string|unique:users',
+            'password'=>'required|string',
+            'c_password' => 'required|same:password'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $user = User::create([
-            'name' => $request->name,
+        $user = new User([
+            'name'  => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        if($user->save()){
+            $tokenResult = $user->createToken('Personal Access Token');
+            $token = $tokenResult->plainTextToken;
 
-        return response()->json([
-            'user' => $user,
-            'token' => $token,
-        ]);
+            return response()->json([
+                'message' => 'Successfully created user!',
+                'user' => $user,
+                'accessToken'=> $token,
+            ],201);
+        }
+        else{
+            return response()->json(['error'=>'Provide proper details']);
+        }
     }
 
+    /**
+     * Login user and create token
+     *
+     * @param  [string] email
+     * @param  [string] password
+     * @param  [boolean] remember_me
+     */
     public function login(Request $request)
     {
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['message' => 'Invalid login details'], 401);
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+            'remember_me' => 'boolean'
+        ]);
+
+        $credentials = request(['email','password']);
+        if(!Auth::attempt($credentials))
+        {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ],401);
         }
 
-        $user = User::where('email', $request['email'])->firstOrFail();
-
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $user = $request->user();
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $tokenResult->plainTextToken;
 
         return response()->json([
+            'accessToken' =>$token,
             'user' => $user,
-            'token' => $token,
+            'token_type' => 'Bearer',
         ]);
     }
 
+    /**
+     * Get the authenticated User
+     *
+     * @return [json] user object
+     */
+    public function user(Request $request)
+    {
+        return response()->json($request->user());
+    }
+
+    /**
+     * Get the authenticated User
+     *
+     * @return [json] user object
+     */
+    public function username(Request $request)
+    {
+        return response()->json($request->user()['name']);
+    }
+
+    /**
+     * Logout user (Revoke the token)
+     *
+     * @return [string] message
+     */
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        $request->user()->tokens()->delete();
 
-        return response()->json(['message' => 'Logged out']);
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
+
     }
 }

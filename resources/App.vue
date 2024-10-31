@@ -31,9 +31,9 @@
                 :class="menuOpen ? 'mt-2 mb-2 pa-2' : 'mt-10 mb-3 pa-5'"
             >
                 <p class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/" class="nav-link text-decoration-none">Главная</RouterLink></p>
-                <p v-if="user == null" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/login" class="nav-link text-decoration-none">Войти</RouterLink></p>
-                <p v-if="user == null" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/register" class="nav-link text-decoration-none">Регистрация</RouterLink></p>
-                <p v-else class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><a href="#" class="nav-link text-decoration-none" @click="logout">Выйти</a></p>
+                <p v-if="!authenticated" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/login" class="nav-link text-decoration-none">Войти</RouterLink></p>
+                <p v-if="!authenticated" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/register" class="nav-link text-decoration-none">Регистрация</RouterLink></p>
+                <p v-if="authenticated" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><a href="#" class="nav-link text-decoration-none" @click="logout">Выйти</a></p>
             </v-sheet>
             <v-sheet class="rounded-lg main-bg h-100 mt-3 mr-10 ml-10 mb-10 pa-5">
                 <RouterView v-slot="{ Component }">
@@ -48,28 +48,23 @@
 </template>
 
 <script>
-import {th} from "vuetify/locale";
-import {useAuthStore} from "./store/auth.js";
+import {useUserStore} from "./store/auth.js";
+import {watch} from "vue";
+
 
 export default {
     name: "App",
     data: () => ({
+        userStore: useUserStore(),
         windowHeight: document.documentElement.clientHeight,
         windowWidth: document.documentElement.clientWidth,
         isWide: window.innerWidth >= 460,
-        menuOpen: false
+        menuOpen: false,
+        authenticated: false
     }),
-    computed: {
-        user() {
-            const authStore = useAuthStore();
-            return authStore.user;
-        },
-    },
     methods: {
         logout() {
-            const authStore = useAuthStore();
-            authStore.logout();
-            this.username = 'guest';
+            this.userStore.logout();
             this.$router.push('/login');
         },
         resizeEventHandler(e) {
@@ -90,6 +85,10 @@ export default {
     mounted() {
         this.resizeEventHandler();
         window.addEventListener("resize", this.resizeEventHandler, { passive: true });
+        this.userStore.checkUser();
+        watch(this.userStore, (newStore)=>{
+            this.authenticated = newStore.user !== null && newStore.user !== undefined;
+        });
     }
 }
 </script>

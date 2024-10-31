@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="images/favicon.svg" sizes="any" type="image/svg+xml">
         <title>Журнал ТО</title>
         @vite('resources/app.js')
         @vite('resources/css/app.css')
