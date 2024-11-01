@@ -7,59 +7,50 @@ use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Job::select()->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function getByComputerId(Request $request){
+        return Job::select()->where('computer_id', '=', $request->get('computer_id'))->get();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function create(Request $request)
     {
-        //
+        $request->validate([
+            'computer_id' => 'required|exists:computers,id',
+            'description' => 'required|string|max:256',
+            'status' => 'nullable|boolean'
+        ]);
+
+        $job = Job::create($request->all());
+        return response()->json($job, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Job $job)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            'id' => 'required|exists:jobs,id',
+            'computer_id' => 'required|exists:computers,id',
+            'description' => 'required|string|max:256',
+            'status' => 'nullable|boolean'
+        ]);
+
+        $job = Job::find($request->get('id'));
+        $job->computer_id = $request->get('computer_id');
+        $job->description = $request->get('description');
+        $job->status = $request->get('status');
+        $job->save();
+        return response()->json($job);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Job $job)
+    public function destroy(Request $request)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Job $job)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Job $job)
-    {
-        //
+        $request->validate([
+            'id' => 'required|exists:jobs,id',
+        ]);
+        $destroyed = Job::destroy($request->get('id'));
+        return response()->json($destroyed, 204);
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\ComputerController;
+use App\Http\Controllers\JobController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,8 +32,20 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'data'], function () {
-    Route::get('computers/all', [ComputerController::class, 'index']);
-    Route::post('computers/create', [ComputerController::class, 'create']);
-    Route::post('computers/save', [ComputerController::class, 'update']);
-    Route::post('computers/delete', [ComputerController::class, 'destroy']);
+    Route::group(['middleware' => 'auth:sanctum'], function() {
+        Route::group(['prefix' => 'computers'], function () {
+            Route::get('all', [ComputerController::class, 'index']);
+            Route::get('byUser', [ComputerController::class, 'getByUserId']);
+            Route::post('create', [ComputerController::class, 'create']);
+            Route::post('save', [ComputerController::class, 'update']);
+            Route::post('delete', [ComputerController::class, 'destroy']);
+        });
+        Route::group(['prefix' => 'jobs'], function () {
+            Route::get('all', [JobController::class, 'index']);
+            Route::get('byComputer', [JobController::class, 'getByComputerId']);
+            Route::post('create', [JobController::class, 'create']);
+            Route::post('save', [JobController::class, 'update']);
+            Route::post('delete', [JobController::class, 'destroy']);
+        });
+    });
 });

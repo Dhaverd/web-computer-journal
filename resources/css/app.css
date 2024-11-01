@@ -4,6 +4,14 @@
     text-decoration-color: #e0e0e0!important;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.text-decoration-none {
+    text-decoration: none;
+}
+
 .bg-gradient {
     background: linear-gradient(-45deg, #f103b0, #f0a068, #4fdbfeff)!important;
     background-size: 200% 200%!important;
@@ -204,7 +212,7 @@
     stroke-dashoffset: -64px;
 }
 .ham8.active .middle {
-//stroke-dashoffset: -20px;
+/*stroke-dashoffset: -20px;*/
     transform: rotate(90deg);
 }
 .ham8.active .bottom {

@@ -32,7 +32,7 @@ class ComputerController extends Controller
         ]);
 
         $computer = Computer::create($request->all());
-        return response()->json($wish, 201);
+        return response()->json($computer, 201);
     }
 
     public function update(Request $request)

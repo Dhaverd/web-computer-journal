@@ -27,13 +27,18 @@
             </div>
             <v-sheet
                 v-if="isWide || menuOpen"
-                class="d-flex justify-end rounded-lg main-bg h-auto mr-10 ml-10"
-                :class="menuOpen ? 'mt-2 mb-2 pa-2' : 'mt-10 mb-3 pa-5'"
+                class="d-flex justify-space-between rounded-lg main-bg h-auto mr-10 ml-10 align-center"
+                :class="menuOpen ? 'mt-2 mb-2 pa-2 flex-column' : 'mt-10 mb-3 pa-5'"
             >
-                <p class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/" class="nav-link text-decoration-none">Главная</RouterLink></p>
-                <p v-if="!authenticated" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/login" class="nav-link text-decoration-none">Войти</RouterLink></p>
-                <p v-if="!authenticated" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/register" class="nav-link text-decoration-none">Регистрация</RouterLink></p>
-                <p v-if="authenticated" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><a href="#" class="nav-link text-decoration-none" @click="logout">Выйти</a></p>
+                <div class="d-flex justify-center rounded-lg main-bg h-auto mr-10 ml-10">
+                    <v-label class="text-h6 h-auto w-auto pa-2">Welcome {{ authenticated ? userStore.user['name'] : 'guest' }}!</v-label><br>
+                </div>
+                <div class="d-flex" :class="menuOpen ? 'justify-center' : 'justify-end'">
+                    <p class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/" class="nav-link text-decoration-none">Главная</RouterLink></p>
+                    <p v-if="!authenticated" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/login" class="nav-link text-decoration-none">Войти</RouterLink></p>
+                    <p v-if="!authenticated" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/register" class="nav-link text-decoration-none">Регистрация</RouterLink></p>
+                    <p v-if="authenticated" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><a href="#" class="nav-link text-decoration-none" @click="logout">Выйти</a></p>
+                </div>
             </v-sheet>
             <v-sheet class="rounded-lg main-bg h-100 mt-3 mr-10 ml-10 mb-10 pa-5">
                 <RouterView v-slot="{ Component }">
