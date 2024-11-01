@@ -13,7 +13,7 @@ export const useComputersStore = defineStore('computers', {
             localStorage.setItem('auth_token', token);
         },
         checkToken(){
-            this.token = this.useUserStore().token;
+            this.token = useUserStore().token;
         },
         async getComputerList(user_id){
             if (this.token === null){
@@ -33,6 +33,29 @@ export const useComputersStore = defineStore('computers', {
             ).then((response)=>{
                 this.computers = response.data;
             })
+        },
+        async create(name, cpu, motherboard, gpu, additional_info){
+            if (this.token === null){
+                this.checkToken();
+            }
+            await axios.post('/api/data/computers/create', {
+                user_id: useUserStore().user['id'],
+                name: name,
+                cpu: cpu,
+                motherboard: motherboard,
+                gpu: gpu,
+                additional_info: additional_info,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${this.token}`,
+                    token: this.token
+                },
+            }).then(()=>{
+                this.getComputerList(useUserStore().user['id']);
+                return true;
+            }).catch(()=>{
+                return false;
+            });
         }
     },
 })
