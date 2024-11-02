@@ -26,6 +26,7 @@ class ComputerController extends Controller
             'user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:256',
             'cpu' => 'nullable|string|max:256',
+            'ram' => 'nullable|string|max:256',
             'motherboard' => 'nullable|string|max:256',
             'gpu' => 'nullable|string|max:256',
             'additional_info' => 'nullable|string|max:256',
@@ -41,6 +42,7 @@ class ComputerController extends Controller
             'id' => 'required|exists:computers,id',
             'name' => 'required|string|max:256',
             'cpu' => 'nullable|string|max:256',
+            'ram' => 'nullable|string|max:256',
             'motherboard' => 'nullable|string|max:256',
             'gpu' => 'nullable|string|max:256',
             'additional_info' => 'nullable|string|max:256',
@@ -60,10 +62,11 @@ class ComputerController extends Controller
     public function destroy(Request $request)
     {
         $request->validate([
-            'id' => 'required|exists:wishes,id',
+            'id' => 'required|exists:computers,id',
         ]);
+        $computer = Computer::find($request->get('id'));
+        JobController::destroyByComputerId($computer);
         $destroyed = Computer::destroy($request->get('id'));
         return response()->json($destroyed, 204);
-
     }
 }

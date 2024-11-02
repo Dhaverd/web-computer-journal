@@ -44,7 +44,6 @@
                 <RouterView v-slot="{ Component }">
                     <Component
                         :is="Component"
-                        :is-wide="isWide"
                     />
                 </RouterView>
             </v-sheet>
@@ -93,6 +92,11 @@ export default {
         this.userStore.checkUser();
         watch(this.userStore, (newStore)=>{
             this.authenticated = newStore.user !== null && newStore.user !== undefined;
+            if (!this.authenticated){
+                this.$router.push('/login');
+            } else {
+                this.$router.push('/');
+            }
         });
     }
 }

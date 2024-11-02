@@ -4,7 +4,7 @@ import { useUserStore } from '../store/auth.js';
 import {useComputersStore} from "../store/computers.js";
 import CreateForm from './Computers/CreateForm.vue';
 export default {
-    name: "About",
+    name: "ComputersList",
     components: {CreateForm},
     data() {
         return {
@@ -13,9 +13,12 @@ export default {
             computerList: [],
             createDialogShow: false,
             editDialogShow: false,
+            deleteDialogShow: false,
             fetching: false,
             authenticated: false,
-            editLoading: false
+            editLoading: false,
+            deleteLoading: false,
+            computerToDeleteId: null
         };
     },
     methods: {
@@ -27,6 +30,19 @@ export default {
         },
         showEditDialog(){
             this.editDialogShow = true;
+        },
+        showDeleteDialog(id){
+            this.deleteDialogShow = true;
+            this.computerToDeleteId = id;
+        },
+        hideDeleteDialog(){
+            this.deleteDialogShow = false;
+        },
+        deleteComputer(){
+            this.deleteLoading = true;
+            this.computersStore.delete(this.computerToDeleteId).then(()=>{
+                this.deleteLoading = false;
+            })
         }
     },
     mounted() {
@@ -35,13 +51,19 @@ export default {
             this.fetching = true;
             this.authenticated = newStore.user !== null && newStore.user !== undefined;
             this.computersStore.setToken(this.userStore.token);
-            if (this.userStore.user['id']){
+            if (this.userStore.user !== null){
                 this.computersStore.getComputerList(this.userStore.user['id']).then(()=>{
                     this.computerList = this.computersStore.computers;
                     this.fetching = false;
                 })
             }
         });
+        watch(this.computersStore, (newStore)=>{
+            this.fetching = true;
+            this.computerList = this.computersStore.computers;
+            this.fetching = false;
+            this.hideDeleteDialog();
+        })
     }
 }
 </script>
@@ -56,14 +78,18 @@ export default {
                         <v-card-title>{{ computer['name'] }}</v-card-title>
                         <v-card-text class="d-flex flex-column cursor-pointer">
                             <v-label class="cursor-pointer">CPU: {{ computer['cpu'] }}</v-label>
+                            <v-label class="cursor-pointer">RAM: {{ computer['ram'] }}</v-label>
                             <v-label class="cursor-pointer">Motherboard: {{ computer['motherboard'] }}</v-label>
                             <v-label class="cursor-pointer">GPU: {{ computer['gpu'] }}</v-label>
                             <v-label class="cursor-pointer">Дополнительная информация: {{ computer['additional_info'] }}</v-label>
                         </v-card-text>
                     </v-card>
                 </router-link>
-                <div @click="showEditDialog" class="card-bg align-self-stretch pa-2 d-flex justify-center align-center rounded-sm">
+                <div @click="showEditDialog" class="card-bg align-self-stretch pa-2 d-flex justify-center align-center rounded-sm cursor-pointer mr-2 ml-2">
                     <v-icon icon="mdi-pencil"></v-icon>
+                </div>
+                <div @click="showDeleteDialog(computer['id'])" class="card-bg align-self-stretch pa-2 d-flex justify-center align-center rounded-sm cursor-pointer mr-2 ml-2">
+                    <v-icon icon="mdi-trash-can"></v-icon>
                 </div>
             </div>
         </div>
@@ -73,8 +99,20 @@ export default {
             </v-btn>
         </div>
     </div>
-    <v-dialog :model-value="createDialogShow">
+    <v-dialog v-model="createDialogShow">
         <CreateForm :dialogClose="hideCreateDialog" />
+    </v-dialog>
+    <v-dialog v-model="deleteDialogShow" class="w-33">
+        <v-card class="main-bg">
+            <v-card-text class="d-flex flex-column">
+                <v-label class="w-100 text-h5">Вы уверены?</v-label>
+                <v-label class="w-100">Это действие удалит компьютер и все действия связанные с ним</v-label>
+                <div class="d-flex w-100 justify-center">
+                    <v-btn color="#F0A068FF" class="ma-2" :loading="deleteLoading" @click="deleteComputer">Да</v-btn>
+                    <v-btn color="#F0A068FF" class="ma-2" @click="hideDeleteDialog">Нет</v-btn>
+                </div>
+            </v-card-text>
+        </v-card>
     </v-dialog>
 </template>
 

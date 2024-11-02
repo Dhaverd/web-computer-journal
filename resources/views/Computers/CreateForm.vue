@@ -16,6 +16,7 @@ export default {
         return {
             computerName: null,
             computerCpu: null,
+            computerRam: null,
             computerMotherboard: null,
             computerGpu: null,
             computerAdditional: null,
@@ -34,6 +35,7 @@ export default {
             this.computersStore.create(
                 this.computerName,
                 this.computerCpu,
+                this.computerRam,
                 this.computerMotherboard,
                 this.computerGpu,
                 this.computerAdditional
@@ -48,15 +50,19 @@ export default {
 
 <template>
     <v-card class="main-bg">
-        <v-card-title>Создание нового компьютера</v-card-title>
+        <v-card-title class="d-flex justify-space-between">
+            <span>Создание нового компьютера</span>
+            <v-icon @click="dialogClose" class="cursor-pointer" icon="mdi-close-thick"></v-icon>
+        </v-card-title>
         <v-card-text>            
             <v-text-field :rules="[rules.notNull]" label="Название" v-model="computerName" placeholder="Мой компьютер"></v-text-field>
             <v-text-field label="CPU" v-model="computerCpu" placeholder="Intel Core i5-12400F"></v-text-field>
+            <v-text-field label="Оперативная память" v-model="computerRam" placeholder="Kingston Fury 2x16GB DDR4"></v-text-field>
             <v-text-field label="Материнская плата" v-model="computerMotherboard" placeholder="Asus ROG B650"></v-text-field>
             <v-text-field label="Gpu" v-model="computerGpu" placeholder="Nvidia RTX 3060ti"></v-text-field>
             <v-textarea label="Дополнительная информация" v-model="computerAdditional"></v-textarea>
             <div class="d-flex justify-center">
-                <v-btn :loading="loading" @click="createComputer">Создать</v-btn>
+                <v-btn color="#F0A068FF" :loading="loading" @click="createComputer">Создать</v-btn>
             </div>
         </v-card-text>
     </v-card>

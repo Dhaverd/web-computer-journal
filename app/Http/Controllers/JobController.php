@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use App\Models\Computer;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
@@ -52,5 +53,15 @@ class JobController extends Controller
         ]);
         $destroyed = Job::destroy($request->get('id'));
         return response()->json($destroyed, 204);
+    }
+
+    public static function destroyByComputerId(Computer $computer)
+    {
+        $computerId = $computer->id;
+        $jobs = Job::select()->where('computer_id', '=', $computerId)->get();
+        foreach ($jobs as $job){
+            Job::destroy($job->id);
+        }
+        return true;
     }
 }

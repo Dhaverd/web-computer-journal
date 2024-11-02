@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('name', length: 256);
             $table->string('cpu', length: 256)->nullable();
+            $table->string('ram', length: 256)->nullable();
             $table->string('motherboard', length: 256)->nullable();
             $table->string('gpu', length: 256)->nullable();
             $table->string('additional_info', length: 256)->nullable();
