@@ -13,7 +13,7 @@ class ComputerController extends Controller
     }
 
     public function getById(Request $request){
-        return Computer::find($request->get('id'));
+        return response()->json(Computer::find($request->get('id')), 200);;
     }
 
     public function getByUserId(Request $request){
@@ -51,6 +51,7 @@ class ComputerController extends Controller
         $computer = Computer::find($request->get('id'));
         $computer->name = $request->get('name');
         $computer->cpu = $request->get('cpu');
+        $computer->ram = $request->get('ram');
         $computer->motherboard = $request->get('motherboard');
         $computer->gpu = $request->get('gpu');
         $computer->additional_info = $request->get('additional_info');

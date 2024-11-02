@@ -15,6 +15,27 @@ export const useComputersStore = defineStore('computers', {
         checkToken(){
             this.token = useUserStore().token;
         },
+        async getById(id){
+            if (this.token === null){
+                this.checkToken();
+            }
+            let result = null;
+            await axios.get(
+                '/api/data/computers/byId',
+                {
+                    headers: {
+                        Authorization: `Bearer ${this.token}`,
+                        token: this.token
+                    },
+                    params: {
+                        id: id
+                    }
+                }
+            ).then((response)=>{
+                result = response.data;
+            });
+            return result;
+        },
         async getComputerList(user_id){
             if (this.token === null){
                 this.checkToken();
@@ -40,6 +61,30 @@ export const useComputersStore = defineStore('computers', {
             }
             await axios.post('/api/data/computers/create', {
                 user_id: useUserStore().user['id'],
+                name: name,
+                cpu: cpu,
+                ram: ram,
+                motherboard: motherboard,
+                gpu: gpu,
+                additional_info: additional_info,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${this.token}`,
+                    token: this.token
+                },
+            }).then(()=>{
+                this.getComputerList(useUserStore().user['id']);
+                return true;
+            }).catch(()=>{
+                return false;
+            });
+        },
+        async update(id, name, cpu, ram, motherboard, gpu, additional_info){
+            if (this.token === null){
+                this.checkToken();
+            }
+            await axios.post('/api/data/computers/save', {
+                id: id,
                 name: name,
                 cpu: cpu,
                 ram: ram,

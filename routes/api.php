@@ -35,6 +35,7 @@ Route::group(['prefix' => 'data'], function () {
     Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::group(['prefix' => 'computers'], function () {
             Route::get('all', [ComputerController::class, 'index']);
+            Route::get('byId', [ComputerController::class, 'getById']);
             Route::get('byUser', [ComputerController::class, 'getByUserId']);
             Route::post('create', [ComputerController::class, 'create']);
             Route::post('save', [ComputerController::class, 'update']);

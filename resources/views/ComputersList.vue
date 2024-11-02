@@ -1,11 +1,12 @@
 <script>
-import { watch } from 'vue';
+import { watch, ref } from 'vue';
 import { useUserStore } from '../store/auth.js';
 import {useComputersStore} from "../store/computers.js";
 import CreateForm from './Computers/CreateForm.vue';
+import EditForm from './Computers/EditForm.vue';
 export default {
     name: "ComputersList",
-    components: {CreateForm},
+    components: {CreateForm, EditForm},
     data() {
         return {
             userStore: useUserStore(),
@@ -18,7 +19,8 @@ export default {
             authenticated: false,
             editLoading: false,
             deleteLoading: false,
-            computerToDeleteId: null
+            computerToDeleteId: null,
+            computerToEditId: ref(0)
         };
     },
     methods: {
@@ -28,8 +30,12 @@ export default {
         hideCreateDialog(){
             this.createDialogShow = false;
         },
-        showEditDialog(){
+        showEditDialog(id){
+            this.computerToEditId = id;
             this.editDialogShow = true;
+        },
+        hideEditDialog(){
+            this.editDialogShow = false;
         },
         showDeleteDialog(id){
             this.deleteDialogShow = true;
@@ -85,7 +91,7 @@ export default {
                         </v-card-text>
                     </v-card>
                 </router-link>
-                <div @click="showEditDialog" class="card-bg align-self-stretch pa-2 d-flex justify-center align-center rounded-sm cursor-pointer mr-2 ml-2">
+                <div @click="showEditDialog(computer['id'])" class="card-bg align-self-stretch pa-2 d-flex justify-center align-center rounded-sm cursor-pointer mr-2 ml-2">
                     <v-icon icon="mdi-pencil"></v-icon>
                 </div>
                 <div @click="showDeleteDialog(computer['id'])" class="card-bg align-self-stretch pa-2 d-flex justify-center align-center rounded-sm cursor-pointer mr-2 ml-2">
@@ -113,6 +119,9 @@ export default {
                 </div>
             </v-card-text>
         </v-card>
+    </v-dialog>
+    <v-dialog v-model="editDialogShow">
+        <EditForm :dialogClose="hideEditDialog" :computer_id="computerToEditId"/>
     </v-dialog>
 </template>
 
