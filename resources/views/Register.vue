@@ -54,8 +54,22 @@ export default {
                 <v-label>E-mail:</v-label>
                 <v-text-field type="email" v-model="email" label="E-mail" class="flex-grow-0" required></v-text-field>
                 <v-label>Пароль:</v-label>
-                <v-text-field type="password" v-model="password" label="Пароль" class="flex-grow-0" required></v-text-field>
-                <v-text-field type="password" v-model="c_password" label="Повторите пароль" class="flex-grow-0" required></v-text-field>
+                <v-text-field
+                    :type="showPassword ? 'text' : 'password'"
+                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="showPassword = !showPassword"
+                    v-model="password"
+                    label="Пароль"
+                    class="flex-grow-0"
+                    required></v-text-field>
+                <v-text-field
+                    :type="showRepeatPassword ? 'text' : 'password'"
+                    :append-icon="showRepeatPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="showRepeatPassword = !showRepeatPassword"
+                    v-model="c_password"
+                    label="Повторите пароль"
+                    class="flex-grow-0"
+                    required></v-text-field>
                 <v-label :style="errorMessageContainerStyle">{{ errorMessage }}</v-label>
                 <div class="d-flex justify-center" :class="isWide ? '' : 'flex-column align-center'">
                     <v-btn type="submit" color="#F0A068FF" class="ma-5" :class="isWide ? 'w-25' : 'w-100 text-body-1'" :loading="loading">Зарегистрироваться</v-btn>

@@ -34,7 +34,7 @@
                     <v-label class="text-h6 h-auto w-auto pa-2">Welcome {{ authenticated ? userStore.user['name'] : 'guest' }}!</v-label><br>
                 </div>
                 <div class="d-flex" :class="menuOpen ? 'justify-center' : 'justify-end'">
-                    <p class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/" class="nav-link text-decoration-none">Главная</RouterLink></p>
+                    <p class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><a href="/" class="nav-link text-decoration-none">Главная</a></p>
                     <p v-if="!authenticated" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/login" class="nav-link text-decoration-none">Войти</RouterLink></p>
                     <p v-if="!authenticated" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><RouterLink to="/register" class="nav-link text-decoration-none">Регистрация</RouterLink></p>
                     <p v-if="authenticated" class="ml-3 mr-3" :class="menuOpen ? 'text-body-1' : 'text-h6'"><a href="#" class="nav-link text-decoration-none" @click="logout">Выйти</a></p>
