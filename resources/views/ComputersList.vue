@@ -52,7 +52,7 @@ export default {
         }
     },
     mounted() {
-        this.userStore.checkUser();
+        this.computerList = this.computersStore.computers;
         watch(this.userStore, (newStore)=>{
             this.fetching = true;
             this.authenticated = newStore.user !== null && newStore.user !== undefined;

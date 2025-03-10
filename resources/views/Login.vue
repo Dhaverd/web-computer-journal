@@ -14,6 +14,7 @@
                     @click:append="showPassword = !showPassword"
                     required></v-text-field>
                 <v-checkbox v-model="rememberMe" label="Запомнить меня"></v-checkbox>
+                <v-label style="color: red" :style="errorMessageContainerStyle">{{ errorMessage }}</v-label>
                 <div class="d-flex justify-center" :class="isWide ? '' : 'flex-column align-center'">
                         <v-btn type="submit" color="#F0A068FF" class="ma-5 flex-grow-0" :class="isWide ? 'w-25' : 'w-100 text-body-1'" :loading="loading">Войти</v-btn>
                     <router-link to="/register" class="text-decoration-none link-no-color ma-5" :class="isWide ? 'w-25' : 'w-100'">
@@ -53,7 +54,6 @@ export default {
                     if (isLogged){
                         this.errorMessage = '';
                         this.errorMessageContainerStyle = 'display: none;';
-                        this.$router.push('/');
                     } else {
                         this.errorMessage = 'Authentication error';
                         this.errorMessageContainerStyle = '';
@@ -63,7 +63,6 @@ export default {
                     this.errorMessageContainerStyle = '';
                 }
             });
-            this.$router.push('/');
         },
     }
 }

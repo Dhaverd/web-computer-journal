@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('computer_id');
             $table->foreign('computer_id')->references('id')->on('computers');
             $table->string('description', length: 256);
-            $table->boolean('status')->default(false);
+            $table->string('status', length: 256);
             $table->timestamps();
         });
     }

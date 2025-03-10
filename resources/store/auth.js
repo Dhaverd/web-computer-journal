@@ -33,6 +33,7 @@ export const useUserStore = defineStore('user', {
             })
         },
         async login(email, password, rememberMe) {
+            let responce = false;
             await axios.post(
                 '/api/auth/login',
                 {
@@ -42,15 +43,17 @@ export const useUserStore = defineStore('user', {
                 }).then((res) => {
                 this.setUser(res.data.user);
                 this.setToken(res.data.accessToken);
-                return true;
+                responce = true;
             }).catch((error) => {
                 if (!error.response) {
-                    return false;
+                    responce = false;
                 }
-                return error.response.data.message;
+                responce = error.response.data.message;
             })
+            return responce;
         },
         async registration(login, email, password, repeatPassword) {
+            let responce = false;
             await axios.post(
                 '/api/auth/register',
                 {
@@ -61,13 +64,14 @@ export const useUserStore = defineStore('user', {
                 }).then((res) => {
                 this.setUser(res.data.user);
                 this.setToken(res.data.accessToken);
-                return true;
+                responce = true;
             }).catch((error) => {
                 if (!error.response) {
-                    return false;
+                    responce = false;
                 }
-                return error.response.data.message;
+                responce=  error.response.data.message;
             })
+            return responce;
         },
         logout() {
             axios.get('/api/auth/logout',

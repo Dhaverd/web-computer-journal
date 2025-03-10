@@ -89,7 +89,6 @@ export default {
     mounted() {
         this.resizeEventHandler();
         window.addEventListener("resize", this.resizeEventHandler, { passive: true });
-        this.userStore.checkUser();
         watch(this.userStore, (newStore)=>{
             this.authenticated = newStore.user !== null && newStore.user !== undefined;
             if (!this.authenticated){
@@ -98,6 +97,7 @@ export default {
                 this.$router.push('/');
             }
         });
+        this.userStore.checkUser();
     }
 }
 </script>

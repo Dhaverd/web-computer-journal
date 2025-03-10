@@ -44,6 +44,7 @@ Route::group(['prefix' => 'data'], function () {
         Route::group(['prefix' => 'jobs'], function () {
             Route::get('all', [JobController::class, 'index']);
             Route::get('byComputer', [JobController::class, 'getByComputerId']);
+            Route::get('byId', [JobController::class, 'getById']);
             Route::post('create', [JobController::class, 'create']);
             Route::post('save', [JobController::class, 'update']);
             Route::post('delete', [JobController::class, 'destroy']);

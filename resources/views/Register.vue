@@ -29,7 +29,6 @@ export default {
                     if (isRegistred){
                         this.errorMessage = '';
                         this.errorMessageContainerStyle = 'display: none;';
-                        this.$router.push('/');
                     } else {
                         this.errorMessage = 'Registration error';
                         this.errorMessageContainerStyle = '';

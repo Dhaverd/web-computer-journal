@@ -14,7 +14,18 @@ class JobController extends Controller
     }
 
     public function getByComputerId(Request $request){
+        $request->validate([
+            'computer_id' => 'required|exists:computers,id'
+        ]);
         return Job::select()->where('computer_id', '=', $request->get('computer_id'))->get();
+    }
+
+    public function getById(Request $request){
+        $request->validate([
+            'id' => 'required|exists:jobs,id'
+        ]);
+        return Job::find($request->get('id'));
+//        return Job::select()->where('id', '=', $request->get('id'))->get();
     }
 
     public function create(Request $request)
@@ -22,7 +33,7 @@ class JobController extends Controller
         $request->validate([
             'computer_id' => 'required|exists:computers,id',
             'description' => 'required|string|max:256',
-            'status' => 'nullable|boolean'
+            'status' => 'required|string|max:256'
         ]);
 
         $job = Job::create($request->all());
@@ -35,7 +46,7 @@ class JobController extends Controller
             'id' => 'required|exists:jobs,id',
             'computer_id' => 'required|exists:computers,id',
             'description' => 'required|string|max:256',
-            'status' => 'nullable|boolean'
+            'status' => 'required|string|max:256'
         ]);
 
         $job = Job::find($request->get('id'));

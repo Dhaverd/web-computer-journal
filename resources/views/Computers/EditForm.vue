@@ -78,10 +78,10 @@ export default {
 <template>
     <v-card class="main-bg">
         <v-card-title class="d-flex justify-space-between">
-            <span>Создание нового компьютера</span>
+            <span>Изменение компьютера</span>
             <v-icon @click="dialogClose" class="cursor-pointer" icon="mdi-close-thick"></v-icon>
         </v-card-title>
-        <v-card-text>      
+        <v-card-text>
             <v-skeleton-loader color="grey-darken-4" type="card" v-if="fetching"></v-skeleton-loader>
             <div v-if="!fetching">
                 <v-text-field :rules="[rules.notNull]" label="Название" v-model="computerName" placeholder="Мой компьютер"></v-text-field>
